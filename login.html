@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+
+    <style>
+        body{
+            margin-top:70px;
+            background: #333;
+            color: #fff;
+        }
+   </style>
+
+    <title>Registration Form</title>
+</head>
+<body class="bg-info">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1>Signup to create an account</h1>
+                <form action="index.html" onsubmit="storeInStorage()">
+                    <div class="form-group">
+                        <label for="fname">First name</label>
+                        <input type="text" class="form-control" id="fname" name="fname" pattern="[A-Za-z]+" minlength="2" maxlength="20" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="lname">Last name</label>
+                        <input type="text" class="form-control" id="lname" name="lname" pattern="[A-Za-z]+">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <h4 class="form-control-sm">(Password must be 8 characters or more and must contain atleast 1 capital letter and number</h4>
+                        <input type="password" class="form-control" id="password" name="password" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\S{10,}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        storeInStorage = () => {
+
+            let first_name = document.getElementById("fname").value;
+            let last_name = document.getElementById("lname").value;
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;      
+
+            sessionStorage.setItem("first_name", first_name);
+            sessionStorage.setItem("last_name", last_name);
+            sessionStorage.setItem("email", email);
+            sessionStorage.setItem("password", password);
+
+            alert(`Stored in session storage:\nName: ${first_name} ${last_name}.\nEmail: ${email}`);
+        }
+
+    </script>
+
+
+  </body>
+  </html>
+</html>

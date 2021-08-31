@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+    <style>
+        body{
+            margin-top: 100px;
+            background: #333;
+            color: #fff;
+        }
+   </style>
+    <title>Document</title>
+</head>
+<body class="bg-info">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="display-4 text-center m-5">Note-taking App</h1>
+                <nav class="navbar">
+                    <button class="btn btn-primary" id="myProfileButton" onclick="location.href='profile.html'">My profile</button>
+                    <button class="btn btn-warning" id="logoutButton" onclick="location.href='login.html'">Logout</button>
+                </nav>
+                <form>
+                    <div class="form-group m-3">
+                        <textarea id="newNoteText" class="form-control form-control-lg d-inline" cols="30" rows="5" placeholder="Start typing a new note here and press the return key to save. Generally, notes are 30-50 characters in length."></textarea>
+                    </div>
+                    
+                </form>
+                
+                <div id="output">
+
+                    <table class="table table-borderless">
+                        <tbody id="notesTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // When note is first created, add it to local storage
+        const addNotetoLocalStorage = (noteText) => {
+            let allNotes = [];
+            if (localStorage.getItem('allNotes')) {
+                allNotes = JSON.parse(localStorage.getItem('allNotes'));
+            }
+            allNotes.push(noteText);
+            localStorage.setItem('allNotes', JSON.stringify(allNotes));
+        }
+
+        // Remove note from local storage when deleted
+        const removeNotefromLocalStorage = (noteText) => {
+            let allNotes = [];
+            if (localStorage.getItem('allNotes')) {
+                allNotes = JSON.parse(localStorage.getItem('allNotes'));
+            }
+            console.log(allNotes);
+            console.log(noteText);
+            allNotes = allNotes.filter(note => note.replaceAll('\n','') != noteText);
+            localStorage.setItem('allNotes', JSON.stringify(allNotes));
+            showAllNotes();
+        }
+
+        // Create note when return is pressed
+        const newNote = document.getElementById('newNoteText');
+        newNote.addEventListener('keyup', function(event) {
+            if (event.keyCode == 13) {
+                addNotetoLocalStorage(event.target.value);
+                showAllNotes();
+                event.target.value = '';
+            }
+        })
+
+        // Delete note
+        document.getElementById('notesTable').addEventListener('click', (e) => {
+            if (e.target.classList.contains('deleteNote')) {
+                let tableRow = e.target.parentElement.parentElement;
+                tableRow.remove();
+
+                noteText = tableRow.firstChild.firstChild.firstChild.innerText;
+                removeNotefromLocalStorage(noteText);
+                showAllNotes();
+            };
+        })
+
+        //Create html card for note
+        const createNote = (noteText) => {
+            let card = document.createElement('div');
+            card.className = 'card card-block card-success mb-2';
+            let cardtext = document.createElement('h6');
+            cardtext.innerText = noteText;
+            card.appendChild(cardtext);
+
+            let text_cell = document.createElement('td');
+            text_cell.appendChild(card)
+            let delete_cell = document.createElement('td')
+            delete_cell.innerHTML = `<a href="#" class="btn btn-danger btn-xl deleteNote">X</a>`;
+            
+            let table_row = document.createElement('tr');
+            table_row.appendChild(text_cell);
+            table_row.appendChild(delete_cell);
+            
+            return table_row;
+        }
+
+        //Display all notes
+        const showAllNotes = () => {
+            let allNotes = [];
+            if (localStorage.getItem('allNotes')){
+                allNotes = JSON.parse(localStorage.getItem('allNotes'));
+            }
+            console.log('All notes:')
+            console.log(allNotes);
+            const htmlTable = document.getElementById('notesTable');
+            htmlTable.innerHTML = '';
+            for (let i=0; i < allNotes.length; i++) {
+                let noteToAdd = createNote(allNotes[i]);
+                htmlTable.appendChild(noteToAdd);
+            }
+        }
+
+        showAllNotes();
+        
+    </script>
+
+</body>
+</html>

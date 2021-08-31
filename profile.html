@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+    <style>
+        body{
+            margin-top: 100px;
+            background: #333;
+            color: #fff;
+        }
+   </style>
+    <title>Document</title>
+</head>
+<body class="bg-info">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="display-4 text-center m-5">Note-taking App</h1>
+                <nav class="navbar">
+                    <button class="btn btn-primary" id="homeButton" onclick="location.href='index.html'">My notes</button>
+                    <button class="btn btn-warning" id="logoutButton" onclick="location.href='login.html'">Logout</button>
+                </nav>
+                <div id="profileDetails">
+
+                    <div class="card card-success mb-2">
+                        <div class="card-block">
+                            <h5 id="profileFirstName">First name:</h5>
+                        </div>
+                    </div>
+                    <div class="card card-success mb-2">
+                        <div class="card-block">
+                            <h5 id="profileLastName">Last name:</h5>
+                        </div>
+                    </div>
+                    <div class="card card-success mb-2">
+                        <div class="card-block">
+                            <h5 id="profileEmail">Email:</h5>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="homeButton" onclick="getGeoLocation()">Get my location!</button>
+                    <div class="card card-success mb-2" id="geoLocationCard">
+                        <div class="card-block">
+                            <h5 id="showCoordinates"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('geoLocationCard').style.visibility = 'hidden';
+
+        getGeoLocation = () => {
+            if(navigator.geolocation) {
+                console.log(navigator.geolocation.getCurrentPosition(displayPosition));
+            }
+        }
+
+        displayPosition = (currentPosition) => {
+            let latitude = Math.round(currentPosition.coords.latitude * 1000) / 1000;
+            let longitude = Math.round(currentPosition.coords.longitude * 1000) / 1000;
+            
+            document.getElementById('geoLocationCard').style.visibility = 'visible';
+            displayElement = document.getElementById("showCoordinates");
+            displayElement.innerHTML = `Your current latitude is: ${latitude}<br>Your current longitude is: ${longitude}`;
+        }
+
+        if (sessionStorage.getItem('first_name')){
+            let fnameOutput = document.getElementById('profileFirstName');
+            fnameOutput.innerText += ` ${sessionStorage.getItem('first_name')}`;
+        }
+
+        if (sessionStorage.getItem('last_name')){
+            let fnameOutput = document.getElementById('profileLastName');
+            fnameOutput.innerText += ` ${sessionStorage.getItem('last_name')}`;
+        }
+
+        if (sessionStorage.getItem('email')){
+            let fnameOutput = document.getElementById('profileEmail');
+            fnameOutput.innerText += ` ${sessionStorage.getItem('email')}`;
+        }
+
+    </script>
+
+</body>
+</html>
